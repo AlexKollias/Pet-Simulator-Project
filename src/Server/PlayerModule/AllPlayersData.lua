@@ -2,6 +2,8 @@ local data = {
     Players = {}
 }
 
+local BackpackChanged : RemoteEvent = game.ReplicatedStorage.Connection.Backpack.BackpackChanged
+
 local statsTable : table = {
     leaderstats = {
         Coins = 100;
@@ -10,7 +12,7 @@ local statsTable : table = {
         Capacity = 30;
         usedSpace = 0;
         Items = {}
-    }
+    };
 }
 
 function data.makePlayerData(player : Player)
@@ -37,6 +39,7 @@ function data.AddToBackpack(player : Player, pet : Model, egg : Model)
     plrBackpack.Items[pet.Name] = pet
     plrBackpack.Items[pet.Name]["Amount"] += 1
     data["Players"][player.Name].Backpack.usedSpace += 1;
+	BackpackChanged:FireClient(player,data["Players"][player.Name])
     print(data["Players"][player.Name])
 end
 

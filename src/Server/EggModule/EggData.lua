@@ -9,6 +9,7 @@ return{
                 Chance = 49; --In % meaning it is 0.555 in 0-1 scale
                 Location = game.ReplicatedStorage.Pets.Egg1.Cat1;
                 Amount = 0;
+                Image = "rbxassetid://16608403830";
             };
             Cat2 = {
                 Name = "Cat2";
@@ -16,6 +17,7 @@ return{
                 Chance = 51; --In % meaning it is 0.555 in 0-1 scale
                 Location = game.ReplicatedStorage.Pets.Egg1.Cat2;
                 Amount = 0;
+                Image = "rbxassetid://16608428709";
             }
         }
     }

@@ -17,7 +17,7 @@ function module.BoughtEgg(player : Player, egg : Model) : boolean
             if (rarity <= counter) then
                 -- send it to the backpack
                 module.GivePet(player, v, egg)
-                return true
+                return true,v.Location
             end
         end
     else
