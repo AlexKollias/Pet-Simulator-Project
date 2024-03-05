@@ -10,7 +10,7 @@ function module.PlayAnimation(player : Player, egg : Model, pet : Model)
 
     -- Co-ordinates for items in view port frame: Position: 0, 0, -6 | Orientation: 0, 90, 0
 
-    local gui : ScreenGui = script:FindFirstChild("EggHatchGUI")
+    local gui : ScreenGui = game.ReplicatedStorage:WaitForChild("EggHatchGUI")
     local vpf : ViewportFrame = gui:FindFirstChild("ViewportFrame")
 
     local eggClone : MeshPart = egg:FindFirstChild("Egg"):Clone()
@@ -59,7 +59,7 @@ function module.PlayAnimation(player : Player, egg : Model, pet : Model)
     tween2:Play()
     task.wait(1)
 
-    gui.Parent = script
+    gui.Parent = game.ReplicatedStorage
 
     camera.CameraType = Enum.CameraType.Custom
 end

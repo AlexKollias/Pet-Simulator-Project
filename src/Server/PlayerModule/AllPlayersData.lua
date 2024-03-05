@@ -13,6 +13,11 @@ local statsTable : table = {
         usedSpace = 0;
         Items = {}
     };
+    EquippedPets = {
+        Max = 4;
+        isEquipped = 0;
+        Pets = {}
+    }
 }
 
 function data.makePlayerData(player : Player)
@@ -39,7 +44,7 @@ function data.AddToBackpack(player : Player, pet : Model, egg : Model)
     plrBackpack.Items[pet.Name] = pet
     plrBackpack.Items[pet.Name]["Amount"] += 1
     data["Players"][player.Name].Backpack.usedSpace += 1;
-	BackpackChanged:FireClient(player,data["Players"][player.Name])
+	BackpackChanged:FireClient(player,data["Players"][player.Name],pet)
     print(data["Players"][player.Name])
 end
 
