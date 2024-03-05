@@ -37,7 +37,7 @@ function module.PositionPets()
         -- local walkJumpAnim = math.max(math.sin(time()*5),-0.1)
         local walkAnim = (math.cos(time()*10)/7)/3
 
-        local petCFrame : CFrame = pet.PrimaryPart.CFrame:Lerp(char.HumanoidRootPart.CFrame * CFrame.new(x,-pet.Configuration.YIndex.Value,z),0.1)
+        local petCFrame : CFrame = pet.PrimaryPart.CFrame:Lerp(char.HumanoidRootPart.CFrame * CFrame.new(x,pet.Configuration.YIndex.Value,z),0.1)
 
         if char.Humanoid.MoveDirection.Magnitude > 0 then
             petCFrame *= CFrame.Angles(0,0,walkAnim)
