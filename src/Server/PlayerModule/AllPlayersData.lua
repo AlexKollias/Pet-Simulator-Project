@@ -11,13 +11,9 @@ local statsTable : table = {
     Backpack = {
         Capacity = 30;
         usedSpace = 0;
-        Items = {}
+        Items = {};
+        MaxEquipped = 4;
     };
-    EquippedPets = {
-        Max = 4;
-        isEquipped = 0;
-        Pets = {}
-    }
 }
 
 function data.makePlayerData(player : Player)

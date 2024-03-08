@@ -52,12 +52,12 @@ function module.PlayAnimation(player : Player, egg : Model, pet : Model)
     local tween1 : Tween = ts:Create(petClone.PrimaryPart, tweenInfo, {Position = Vector3.new(0,0,-6)})
     
     tween1:Play()
-    task.wait(3)
+    task.wait(0) -- Should be 3 for a more dramatic effect ,just trying to speed things up
 
     local tween2 : Tween = ts:Create(petClone.PrimaryPart, tweenInfo, {Position = Vector3.new(0,-15,-6)})
 
-    tween2:Play()
-    task.wait(1)
+    tween2:Play() -- This is the drop, I nee to make it 1s. Testing with 4 secs delay is killing me 
+    task.wait(0) 
 
     gui.Parent = game.ReplicatedStorage
 

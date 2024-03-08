@@ -1,4 +1,6 @@
-local module = {}
+ local module = {}
+
+local ts = game:GetService("TweenService")
 
 local player : Player = script.Parent.Parent.Parent.Parent
 local char : Model = player.Character or player.CharacterAdded:Wait();
@@ -10,11 +12,19 @@ local backpackGUI : ScreenGui = playerGui:WaitForChild("BackpackGUI")
 local bFrame : Frame = backpackGUI:FindFirstChild("BackpackFrame")
 local petFrame : ScrollingFrame = bFrame:FindFirstChild("PetFrame")
 local petSlot : Frame = script:FindFirstChild("PetSlot")
+local warning : TextLabel = backpackGUI:FindFirstChild("Warning")
+local eFrame : Frame = bFrame:FindFirstChild("EquippedFrame")
+local pEq : TextLabel = eFrame:FindFirstChild("PetsEquipped")
 
 local pDataFrame : Frame = backpackGUI:FindFirstChild("PetData")
 
 function module.openCloseBackpack()
+    local openOrClosed = bFrame.Visible
     bFrame.Visible = not bFrame.Visible;
+    
+    if(openOrClosed) then
+        pDataFrame.Visible = false
+    end
 end
 
 function module.AddPet(pet : table)
@@ -55,10 +65,16 @@ end
 local rarityColors = {
     Common = BrickColor.new(211,211,211);
 }
+local hasEquipped = 0
+local connection
+function module.OnClick(pet : table, slot : Frame, data : table)
+    if(connection) then
+        connection:Disconnect()
+    end
 
-function module.OnClick(pet : table, slot : Frame)
     pDataFrame.Close.MouseButton1Click:Connect(function()
         pDataFrame.Visible = false
+        connection:Disconnect()
         return;
     end)
 
@@ -67,19 +83,27 @@ function module.OnClick(pet : table, slot : Frame)
     pDataFrame.Stats.Text = pet.Multiplier
     pDataFrame.Rarity.Text = pet.Rarity
     pDataFrame.Rarity.BackgroundColor = rarityColors[pet.Rarity]
-    pDataFrame.Name = pet.Name
+    pDataFrame.NameText.Text = pet.Name
 
-    pDataFrame.Equip.MouseButton1Click:Connect(function()
-        module.onEquip(slot)
+    if(slot.Equipped.Value) then
+        pDataFrame.Equip.Text = "Unequip"
+    else
+        pDataFrame.Equip.Text = "Equip"
+    end
+
+    connection = pDataFrame.Equip.MouseButton1Click:Connect(function()
+        module.onEquip(slot, data)
     end)
 end
 
-function module.onEquip(slot : Frame)
+function module.onEquip(slot : Frame, data : table)
     local eq : boolean = slot.Equipped.Value
 
     if(eq == true) then
         --Unequip the pet
         pDataFrame.Equip.Text = "Equip"
+        hasEquipped -= 1
+        print("unequipped Slot : ".. slot.Name)
         
         petFolder:FindFirstChild(slot.Name:sub(0,-4)):Destroy() -- delete the pet from the equipped folder
         slot.LayoutOrder = 10 -- change the order so that only the equipped pets show up first
@@ -88,21 +112,46 @@ function module.onEquip(slot : Frame)
         
     else
         --Equip the pet    
+        if (data.MaxEquipped < hasEquipped + 1)then
+            warningAnim("Reached max")
+            return;
+        end
+        hasEquipped += 1
         pDataFrame.Equip.Text = "Unequip"
+        print("Equipped slot:".. slot.Name)
         local petToEquip : Model = game.ReplicatedStorage.Pets:FindFirstChild(slot.Name:sub(0,-4),true)
 
-        local timeDelay = Instance.new("IntValue",petToEquip)
+        local clonedPet = petToEquip:Clone()
+        clonedPet.Parent = petFolder -- Add the pet to the equipped folder
+
+        local timeDelay = Instance.new("IntValue",clonedPet)
         timeDelay.Name = "TimeDelay"
         timeDelay.Value = math.random(1,10)
-
-        petToEquip:Clone().Parent = petFolder -- Add the pet to the equipped folder
         
         slot.LayoutOrder = 0 -- remove the layout order so the pets go back
         slot.EqIndicator.Visible = true;
         slot.Equipped.Value = true
-        
     end
+    pEq.Text = hasEquipped.."/"..data.MaxEquipped -- Shows the amount of pets you have equipped
+end
 
+function warningAnim(message : string)
+    local warningClone = warning:Clone()
+
+    warningClone.Text = message
+    warningClone.Parent = backpackGUI
+    warningClone.Position = warning.Position
+    warningClone.AnchorPoint = Vector2.new(0.5, 0.5)
+
+    local tweenInfo = TweenInfo.new(1,Enum.EasingStyle.Exponential,Enum.EasingDirection.In)
+    local tween = ts:Create(warningClone,tweenInfo,{Position = UDim2.new(0.5,0,0.5,0)})
+
+    tween:Play()
+    task.wait(1)
+    local tween2 = ts:Create(warningClone,tweenInfo,{Position = UDim2.new(0.5,0,2,0)})
+    tween2:play()
+    task.wait(1)
+    warningClone:Destroy()
 end
 
 return module;

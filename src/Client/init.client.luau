@@ -50,7 +50,7 @@ event.OnClientEvent:Connect(function(data : table, pet : table) -- If this fires
     slotClone.Name = pet.Name .. math.random(100,999)
 
     slotClone.MouseButton1Click:Connect(function()
-        backpack.OnClick(pet,slotClone)
+        backpack.OnClick(pet,slotClone,data["Backpack"])
     end)
 end)
 
