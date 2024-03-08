@@ -1,10 +1,6 @@
 local player : Player = script.Parent.Parent
 local char : Model = player.Character or player.CharacterAdded:Wait() 
 
-local PetEquippedFolder : Folder = Instance.new("Folder")
-PetEquippedFolder.Parent = char
-PetEquippedFolder.Name = "PetsEquipped"
-
 local playerGUI = player:WaitForChild("PlayerGui")
 local backpackGUI : ScreenGui = playerGUI:FindFirstChild("BackpackGUI")
 local bFrame : Frame = backpackGUI:FindFirstChild("BackpackFrame")
@@ -36,9 +32,10 @@ end)
 coroutine.resume(thread)
 
 rs.RenderStepped:Connect(function(dt)
-    for i,pet : Model in pairs(PetEquippedFolder:GetChildren()) do
-        backpack.PositionPets()
+    for j,folder in workspace:FindFirstChild("PlayerEggs"):GetChildren() do
+        backpack.PositionPets(folder)
     end
+    
 end)
 
 event.OnClientEvent:Connect(function(data : table, pet : table) -- If this fires it means new data has come in, hooray
@@ -50,10 +47,10 @@ event.OnClientEvent:Connect(function(data : table, pet : table) -- If this fires
 
     slotClone.Parent = petFrame
     slotClone.Image = pet.Image
-    slotClone.Name = pet.Name
+    slotClone.Name = pet.Name .. math.random(100,999)
 
     slotClone.MouseButton1Click:Connect(function()
-        backpack.onEquip(slotClone)
+        backpack.OnClick(pet,slotClone)
     end)
 end)
 

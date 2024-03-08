@@ -10,6 +10,7 @@ return{
                 Location = game.ReplicatedStorage.Pets.Egg1.Cat1;
                 Amount = 0;
                 Image = "rbxassetid://16608403830";
+                Multiplier = 5;
             };
             Cat2 = {
                 Name = "Cat2";
@@ -18,6 +19,7 @@ return{
                 Location = game.ReplicatedStorage.Pets.Egg1.Cat2;
                 Amount = 0;
                 Image = "rbxassetid://16608428709";
+                Multiplier = 2;
             }
         }
     }

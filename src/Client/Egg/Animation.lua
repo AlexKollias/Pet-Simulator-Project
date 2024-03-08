@@ -26,9 +26,9 @@ function module.PlayAnimation(player : Player, egg : Model, pet : Model)
     
     gui.Parent = player:FindFirstChild("PlayerGui")
 	
-	local n = 0.8
+	local n = 0.4
 	local orient = 20
-    local shakes = 4
+    local shakes = 2
 	
 	for _ = 1,shakes do
 		local tweenInfo = TweenInfo.new(n,Enum.EasingStyle.Elastic,Enum.EasingDirection.InOut,0,true,0.1)

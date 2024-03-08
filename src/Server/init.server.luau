@@ -16,6 +16,11 @@ game.Players.PlayerAdded:Connect(function(player : Player)
     end)
 
     print(PlayerData)
+    player.CharacterAdded:Connect(function(char : Model)
+        local PetEquippedFolder : Folder = Instance.new("Folder")
+        PetEquippedFolder.Parent = workspace:FindFirstChild("PlayerEggs")
+        PetEquippedFolder.Name = player.Name
+    end)
 end)
 
 
