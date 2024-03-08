@@ -67,9 +67,14 @@ local rarityColors = {
 }
 local hasEquipped = 0
 local connection
+local deleteConnection
 function module.OnClick(pet : table, slot : Frame, data : table)
     if(connection) then
         connection:Disconnect()
+    end
+
+    if (deleteConnection) then
+        deleteConnection:Disconnect()
     end
 
     pDataFrame.Close.MouseButton1Click:Connect(function()
@@ -80,7 +85,7 @@ function module.OnClick(pet : table, slot : Frame, data : table)
 
     pDataFrame.Visible = true
     pDataFrame.PetImage.Image = pet.Image
-    pDataFrame.Stats.Text = pet.Multiplier
+    pDataFrame.Stats.Text = "x"..pet.Multiplier
     pDataFrame.Rarity.Text = pet.Rarity
     pDataFrame.Rarity.BackgroundColor = rarityColors[pet.Rarity]
     pDataFrame.NameText.Text = pet.Name
@@ -93,6 +98,10 @@ function module.OnClick(pet : table, slot : Frame, data : table)
 
     connection = pDataFrame.Equip.MouseButton1Click:Connect(function()
         module.onEquip(slot, data)
+    end)
+
+    deleteConnection = pDataFrame.Delete.MouseButton1Click:Connect(function()
+        deletePet(pet,slot,data)
     end)
 end
 
@@ -152,6 +161,25 @@ function warningAnim(message : string)
     tween2:play()
     task.wait(1)
     warningClone:Destroy()
+end
+
+function deletePet(pet : table, slot : ImageButton, data : table)
+    -- Deletes the pet from the backpack (client)
+    local petToDelete = workspace.PlayerEggs[char.Name]:FindFirstChild(pet.Name)
+
+    if(petToDelete) then
+        petToDelete:Destroy()
+        hasEquipped -= 1
+    end
+
+    petFrame:FindFirstChild(slot.Name):Destroy()
+    pDataFrame.Visible = false
+
+    -- Deletes the pet from the player's data (server)
+    local event : RemoteEvent = game.ReplicatedStorage.Connection.Egg.deletePet
+    event:FireServer(pet)
+    
+    pEq.Text = hasEquipped.."/"..data.MaxEquipped
 end
 
 return module;

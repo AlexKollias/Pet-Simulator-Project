@@ -4,6 +4,7 @@ local data = {
 
 local BackpackChanged : RemoteEvent = game.ReplicatedStorage.Connection.Backpack.BackpackChanged
 
+
 local statsTable : table = {
     leaderstats = {
         Coins = 100;
